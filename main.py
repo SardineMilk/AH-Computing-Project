@@ -11,21 +11,23 @@ class VoxelEngine:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
 
         # Initialise the player class
-        self.player = Player((0, 0, 0), 0, 0)
+        self.player = Player([0, 0, 0], [0, 0, 0])
 
         # Initialise the world
-        self.world = World("file_name")
+        #self.world = World("file_name")
 
         # Initialise the clock - used for fps and movement
         self.clock = pg.time.Clock()
 
         # Hide and lock the mouse
-        pg.mouse.set_visible(False)
-        pg.event.set_grab(True)  # Prevents mouse from moving
+        if GRAB_MOUSE:
+            pg.mouse.set_visible(False)
+            pg.event.set_grab(True)  # Prevents mouse from moving
 
         self.running = True
 
     def handleEvents(self):
+        # This function will (probably) connect to the database
         # Process the event queue
         # Calling pg.event.get() here means later input handling will work without additional overhead
         for event in pg.event.get():
@@ -39,20 +41,22 @@ class VoxelEngine:
 
     def update(self):
         # Update all time related variables
-        self.delta = self.clock.tick()
+        self.delta = self.clock.tick()  # Time since last frams
         self.fps = self.clock.get_fps()
         self.time = pg.time.get_ticks() * 0.001  # Program's runtime in seconds
 
         # Update player
-        self.player.update(self.keys, self.relative_mouse_movement, self.delta)
+        self.player.update(self.keys, self.relative_mouse_movement, self.delta)  # This should be before world so the matrices get updated/generated
 
         # Update world
-        self.world.update()
+        #self.world.update()
 
     def render(self):
         # Clear the screen
         # Display voxel faces
         # Display HUD
+
+        print(self.player.position, "   ", self.player.rotation, "  ", round(self.fps, 2))
 
         pg.display.flip()
 
