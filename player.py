@@ -43,3 +43,4 @@ class Player(Camera):
 
         # Clamp the pitch to directly up/down
         self.rotation[1] = clamp(self.rotation[1], -90, 90)
+        

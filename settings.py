@@ -2,11 +2,18 @@ import pygame as pg
 import numpy as np
 import math
 
+
+# Debug tools
+GRAB_MOUSE = True
+PROFILE = True
+
 # The width and height of the window the game is displayed on
 WIDTH, HEIGHT = 1920, 1080
 WIDTH, HEIGHT =  600, 600
 CENTRE = (WIDTH//2, HEIGHT//2)
 ASPECT_RATIO = WIDTH / HEIGHT
+
+BACKGROUND_COLOR = (32, 32, 32)
 
 # The maximum number of times the main loop can run per second
 MAX_FPS = 120
@@ -19,7 +26,6 @@ CHUNK_VOLUME = CHUNK_SIZE**3
 # Player variables
 PLAYER_SPEED = 1  # Voxels per second
 PLAYER_ROTATION_SENSITIVITY = 1
-GRAB_MOUSE = True # Mostly debug tool
 VERTICAL_FOV = 1  # (Radians)
 
 # Clipping planes

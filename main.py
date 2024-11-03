@@ -3,6 +3,9 @@ from settings import *
 from player import Player
 from world import World
 
+if PROFILE:
+    import profiler
+    profiler.profiler().start(True)
 
 class VoxelEngine:
     def __init__(self):
@@ -53,8 +56,14 @@ class VoxelEngine:
 
     def render(self):
         # Clear the screen
+        self.screen.fill(BACKGROUND_COLOR)
         # Display voxel faces
         # Display HUD
+        
+        faces = [(((0, 0), (300, 0), (300, 300), (0, 300)), (1, 1, 1))]*999
+
+        #[pg.gfxdraw.filled_polygon(self.screen, shape, color) for shape, color in faces]  # Slower
+        [pg.draw.polygon(self.screen, color, shape) for shape, color in faces]
 
         print(self.player.position, "   ", self.player.rotation, "  ", round(self.fps, 2))
 
@@ -76,7 +85,7 @@ class VoxelEngine:
 
 
 # The main function of the next line is to stop the code from running if the file is imported as a module
-# However, it also makes 'game' into a local variable instead of global
+# However, it also makes 'game' a local variable instead of global
 # Thus means python can use STORE_FAST instead of STORE_NAME in the bytecode, giving a minor performance increase
 if __name__ == "__main__":
     game = VoxelEngine()
