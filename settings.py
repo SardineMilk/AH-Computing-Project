@@ -57,3 +57,34 @@ def add(vector1, vector2):
 
 def clamp(n, minn, maxn):
     return max(minn, min(n, maxn))
+
+
+# Voxel data - used to build meshes
+VERTICES = [
+    (0, 0, 0),
+    (1, 0, 0),
+    (1, 1, 0),
+    (0, 1, 0),
+    (0, 0, 1),
+    (1, 0, 1),
+    (1, 1, 1),
+    (0, 1, 1),
+]
+
+FACES = [
+    (0, 1, 2, 3),  # Front face
+    (4, 5, 6, 7),  # Back face
+    (4, 0, 3, 7),  # Left face
+    (1, 5, 6, 2),  # Right face
+    (4, 5, 1, 0),  # Top face
+    (3, 2, 6, 7),  # Bottom face
+]
+
+FACE_NORMALS = [
+    (0, 0, -1),
+    (0, 0, 1),
+    (-1, 0, 0),
+    (1, 0, 0),
+    (0, -1, 0),
+    (0, 1, 0),
+]

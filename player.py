@@ -5,14 +5,14 @@ from pygame.locals import *
 class Player(Camera):
     def update(self, keys, mouse_movement, delta):
         # Update the position/rotation using the input values
-        self.rotate(mouse_movement, delta)
-        self.move(keys, delta)
+        self.__rotate(mouse_movement, delta)
+        self.__move(keys, delta)
 
         # Update the matrices with the new values
-        self.updateCameraMatrix()
+        self._updateCameraMatrix()
     
-    def move(self, keys, delta):
-        speed = PLAYER_SPEED
+    def __move(self, keys, delta):
+        speed = PLAYER_SPEED * delta
         movement_vector = [0, 0, 0]  #x, y, z
 
         # x
@@ -34,7 +34,7 @@ class Player(Camera):
         movement_vector = normalise(movement_vector)
         self.position = add(self.position, movement_vector)
 
-    def rotate(self, mouse_movement, delta):
+    def __rotate(self, mouse_movement, delta):
         yaw   = mouse_movement[0] * PLAYER_ROTATION_SENSITIVITY * delta
         pitch = mouse_movement[1] * PLAYER_ROTATION_SENSITIVITY * delta
 
