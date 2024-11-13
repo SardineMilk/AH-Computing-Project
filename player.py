@@ -12,8 +12,8 @@ class Player(Camera):
         self._updateCameraMatrix()
     
     def __move(self, keys, delta):
-        speed = PLAYER_SPEED * delta
-        movement_vector = Vector(0, 0, 0)  #x, y, z
+        speed = PLAYER_SPEED
+        movement_vector = Vector((0, 0, 0))  #x, y, z
 
         # Right
         if keys[pg.K_d]:
@@ -35,20 +35,20 @@ class Player(Camera):
             movement_vector.z -= speed
         
         # Normalise the vector so moving diagonally isn't faster
-        movement_vector = movement_vector.normalise()
+        #movement_vector.normalise()
 
         # Rotate the vector so moving forward always moves you 'forward' from your perspective
-        movement_vector = movement_vector.rotate(self.rotation)
+        movement_vector.rotate(self.rotation.x, self.rotation.y, self.rotation.z)
 
         self.position = self.position + movement_vector
 
     def __rotate(self, mouse_movement, delta):
-        yaw   = mouse_movement[0] * PLAYER_ROTATION_SENSITIVITY * delta
-        pitch = mouse_movement[1] * PLAYER_ROTATION_SENSITIVITY * delta
+        yaw   = mouse_movement[0] * PLAYER_ROTATION_SENSITIVITY 
+        pitch = mouse_movement[1] * PLAYER_ROTATION_SENSITIVITY 
 
-        rotation_vector = Vector(yaw, pitch, 0)
+        rotation_vector = Vector((yaw, pitch, 0))
         # Add the rotation vector to the player rotation 
         self.rotation = self.rotation + rotation_vector
         # Clamp the pitch to directly up/down
-        self.rotation[1] = clamp(self.rotation[1], -90, 90)
+        self.rotation.y = clamp(self.rotation.y, -90, 90)
         

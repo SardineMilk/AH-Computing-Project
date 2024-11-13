@@ -2,8 +2,8 @@ from settings import *
 
 class Camera:
     def __init__(self, position, rotation):
-        self.position = position
-        self.rotation = rotation
+        self.position = Vector(position)
+        self.rotation = Vector(rotation)
 
         # The projection matrix doesn't change, so it is calculated once at runtime
         self.__generateProjectionMatrix()

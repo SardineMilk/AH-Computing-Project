@@ -7,7 +7,7 @@ from vector import Vector
 
 # Debug tools
 GRAB_MOUSE = True
-PROFILE = True
+PROFILE = False
 
 # The width and height of the window the game is displayed on
 WIDTH, HEIGHT = 1920, 1080
@@ -49,14 +49,14 @@ def clamp(n, minn, maxn):
 
 # Voxel data - used to build meshes
 VERTICES = [
-    Vector(0, 0, 0),
-    Vector(1, 0, 0),
-    Vector(1, 1, 0),
-    Vector(0, 1, 0),
-    Vector(0, 0, 1),
-    Vector(1, 0, 1),
-    Vector(1, 1, 1),
-    Vector(0, 1, 1),
+    Vector((0, 0, 0)),
+    Vector((1, 0, 0)),
+    Vector((1, 1, 0)),
+    Vector((0, 1, 0)),
+    Vector((0, 0, 1)),
+    Vector((1, 0, 1)),
+    Vector((1, 1, 1)),
+    Vector((0, 1, 1)),
 ]
 
 FACES = [
@@ -69,10 +69,10 @@ FACES = [
 ]
 
 FACE_NORMALS = [
-    Vector(0, 0, -1),
-    Vector(0, 0, 1),
-    Vector(-1, 0, 0),
-    Vector(1, 0, 0),
-    Vector(0, -1, 0),
-    Vector(0, 1, 0),
+    Vector((0, 0, -1)),
+    Vector((0, 0, 1)),
+    Vector((-1, 0, 0)),
+    Vector((1, 0, 0)),
+    Vector((0, -1, 0)),
+    Vector((0, 1, 0)),
 ]

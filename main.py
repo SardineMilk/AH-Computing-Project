@@ -14,7 +14,7 @@ class VoxelEngine:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
 
         # Initialise the player class
-        self.player = Player([0, 0, 0], [0, 0, 0])
+        self.player = Player([0, 0, 0], [90, 0, 0])
 
         # Initialise the world
         #self.world = World("file_name")
@@ -65,7 +65,7 @@ class VoxelEngine:
         #[pg.gfxdraw.filled_polygon(self.screen, shape, color) for shape, color in faces]  # Slower
         [pg.draw.polygon(self.screen, color, shape) for shape, color in faces]
 
-        print(self.player.position, "   ", self.player.rotation, "  ", round(self.fps, 2))
+        print(self.player.position.position().round(1), "   ", self.player.rotation.position().round(1), "  ", round(self.fps, 2))
 
         pg.display.flip()
 
