@@ -13,7 +13,7 @@ class Camera:
         # So we recalculate it every frame
         self.__generateViewMatrix()
 
-        self.cameraMatrix = self.__projection_matrix  # * self.view_matrix
+        self.cameraMatrix = self.__projection_matrix  # @ self.view_matrix
 
     def __generateViewMatrix(self):
         # Multiply the mesh by this to rotate and translate it from world space to view space
@@ -21,10 +21,10 @@ class Camera:
         pass
 
     def __generateProjectionMatrix(self):
-        # Multiply the mesh by this to project it onto the screen - 3d to 2d
-        # It is a 4*4 matrix, which means it is not destructive - You can multiply by the inverse to reverse the process
+        # Multiply the mesh by this then divide by w' to project it onto the screen - 3d to 2d
+        # It is a 4*4 matrix, which means it is not destructive - You can reverse the process to reverse the process
 
-        # [x, y, z, 1] * [matrix] = [x', y', z', w']
+        # [x, y, z, 1] @ [matrix] = [x', y', z', w']
 
         # Initialise the matrix
         self.__projection_matrix = np.zeros((4, 4))

@@ -19,7 +19,16 @@ class Chunk:
         return self.__voxels[x, y, z]
 
     def setVoxel(self, position, type):
-        pass
+        x, y, z = position
+
+        # Range check - is position in bounds of the chunk
+        if (0 < x or x > CHUNK_SIZE - 1 or 
+            0 < y or y > CHUNK_SIZE - 1 or
+            0 < z or z > CHUNK_SIZE - 1):
+            print(f"Index {position} is out of range")
+            return 0
+        
+        self.__voxels[x, y, z] == type
 
     def loadChunkData(self):
         # Open file: world_name/chunk_index.txt
@@ -35,9 +44,8 @@ class Chunk:
         for voxel_pos in filtered_voxels:
             for face_index, face_normal in enumerate(FACE_NORMALS):
                 # Interior Face Culling
-                check_pos = Vector(voxel_pos) + Vector(face_normal)
+                check_pos = Vector(voxel_pos) + face_normal
                 if self.__voxels[check_pos.x, check_pos.y, check_pos.z] == 0:
                     mesh.append((voxel_pos, face_index))
-
 
         pass

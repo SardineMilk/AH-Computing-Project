@@ -2,6 +2,8 @@ import pygame as pg
 import numpy as np
 import math
 
+from vector import Vector
+
 
 # Debug tools
 GRAB_MOUSE = True
@@ -34,20 +36,6 @@ FAR = 1000
 
 # TODO - Vector Class
 
-# Convert a 3d vector to have a length of 1
-def normalise(vector):
-    magnitude = math.sqrt(vector[0]**2 + vector[1]**2 + vector[2]**2)
-
-    # Avoid edge case of (0, 0, 0) vectors
-    if magnitude == 0:
-        return (0.0, 0.0, 0.0)
-
-    x = vector[0] / magnitude
-    y = vector[1] / magnitude
-    z = vector[2] / magnitude
-
-    return [x, y, z]
-
 
 def add(vector1, vector2):
     x1, y1, z1 = vector1
@@ -61,14 +49,14 @@ def clamp(n, minn, maxn):
 
 # Voxel data - used to build meshes
 VERTICES = [
-    (0, 0, 0),
-    (1, 0, 0),
-    (1, 1, 0),
-    (0, 1, 0),
-    (0, 0, 1),
-    (1, 0, 1),
-    (1, 1, 1),
-    (0, 1, 1),
+    Vector(0, 0, 0),
+    Vector(1, 0, 0),
+    Vector(1, 1, 0),
+    Vector(0, 1, 0),
+    Vector(0, 0, 1),
+    Vector(1, 0, 1),
+    Vector(1, 1, 1),
+    Vector(0, 1, 1),
 ]
 
 FACES = [
@@ -81,10 +69,10 @@ FACES = [
 ]
 
 FACE_NORMALS = [
-    (0, 0, -1),
-    (0, 0, 1),
-    (-1, 0, 0),
-    (1, 0, 0),
-    (0, -1, 0),
-    (0, 1, 0),
+    Vector(0, 0, -1),
+    Vector(0, 0, 1),
+    Vector(-1, 0, 0),
+    Vector(1, 0, 0),
+    Vector(0, -1, 0),
+    Vector(0, 1, 0),
 ]

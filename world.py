@@ -4,6 +4,8 @@ from settings import *
 class World:
     def __init__(self, world_name):
         self.world_name = world_name
+
+        # 3d array of Chunk objects
         pass
 
     def update(self):
@@ -19,4 +21,7 @@ class World:
         pass
 
     def __loadChunk(self, index):
+        pass
+
+    def __updateMesh(self):
         pass

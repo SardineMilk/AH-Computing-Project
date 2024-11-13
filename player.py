@@ -13,34 +13,42 @@ class Player(Camera):
     
     def __move(self, keys, delta):
         speed = PLAYER_SPEED * delta
-        movement_vector = [0, 0, 0]  #x, y, z
+        movement_vector = Vector(0, 0, 0)  #x, y, z
 
-        # x
+        # Right
         if keys[pg.K_d]:
-            movement_vector[0] += speed
+            movement_vector.x += speed
+        # Left
         if keys[pg.K_a]:
-            movement_vector[0] -= speed
-        # y
+            movement_vector.x -= speed
+        # Up
         if keys[pg.K_SPACE]:
-            movement_vector[1] += speed
+            movement_vector.y += speed
+        # Down
         if keys[pg.K_LSHIFT]:
-            movement_vector[1] -= speed
-        # z
+            movement_vector.y -= speed
+        # Forward
         if keys[pg.K_w]:
-            movement_vector[2] += speed
+            movement_vector.z += speed
+        # Back
         if keys[pg.K_s]:
-            movement_vector[2] -= speed
+            movement_vector.z -= speed
         
-        movement_vector = normalise(movement_vector)
-        self.position = add(self.position, movement_vector)
+        # Normalise the vector so moving diagonally isn't faster
+        movement_vector = movement_vector.normalise()
+
+        # Rotate the vector so moving forward always moves you 'forward' from your perspective
+        movement_vector = movement_vector.rotate(self.rotation)
+
+        self.position = self.position + movement_vector
 
     def __rotate(self, mouse_movement, delta):
         yaw   = mouse_movement[0] * PLAYER_ROTATION_SENSITIVITY * delta
         pitch = mouse_movement[1] * PLAYER_ROTATION_SENSITIVITY * delta
 
-        rotation_vector = [yaw, pitch, 0]
-        self.rotation = add(self.rotation, rotation_vector)
-
+        rotation_vector = Vector(yaw, pitch, 0)
+        # Add the rotation vector to the player rotation 
+        self.rotation = self.rotation + rotation_vector
         # Clamp the pitch to directly up/down
         self.rotation[1] = clamp(self.rotation[1], -90, 90)
         
