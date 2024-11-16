@@ -14,10 +14,10 @@ class VoxelEngine:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
 
         # Initialise the player class
-        self.player = Player([0, 0, 0], [90, 0, 0])
+        self.player = Player([0, 0, 0], [0, 0, 0])
 
         # Initialise the world
-        #self.world = World("file_name")
+        self.world = World("file_name")
 
         # Initialise the clock - used for fps and movement
         self.clock = pg.time.Clock()
@@ -41,6 +41,7 @@ class VoxelEngine:
         # Get the keyboard and mouse data
         self.keys = pg.key.get_pressed()
         self.relative_mouse_movement = pg.mouse.get_rel()
+        self.mouse_pressed = pg.mouse.get_pressed()
 
     def update(self):
         # Update all time related variables
@@ -49,24 +50,24 @@ class VoxelEngine:
         self.time = pg.time.get_ticks() * 0.001  # Program's runtime in seconds
 
         # Update player
-        self.player.update(self.keys, self.relative_mouse_movement, self.delta)  # This should be before world so the matrices get updated/generated
+        self.player.update(self.keys, self.relative_mouse_movement, self.mouse_pressed, self.delta)  # This should be before world so the matrices get updated/generated
 
         # Update world
-        #self.world.update()
+        self.world.update(self.player.position, self.player.look_pos, self.player.look_type)
 
     def render(self):
         # Clear the screen
         self.screen.fill(BACKGROUND_COLOR)
         # Display voxel faces
-        # Display HUD
         
-        faces = [(((0, 0), (300, 0), (300, 300), (0, 300)), (1, 1, 1))]*999
+        
+        faces = [(((0, 0), (300, 0), (300, 300), (0, 300)), (0, 127, 127))]
 
         #[pg.gfxdraw.filled_polygon(self.screen, shape, color) for shape, color in faces]  # Slower
         [pg.draw.polygon(self.screen, color, shape) for shape, color in faces]
 
-        print(self.player.position.position().round(1), "   ", self.player.rotation.position().round(1), "  ", round(self.fps, 2))
-
+        # Display HUD
+        print(self.player.position.position().round(1), "   ", self.player.rotation.position().round(1), "  ", round(self.fps, 2), "   ", len(self.world.chunks))  
         pg.display.flip()
 
     def run(self):

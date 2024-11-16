@@ -12,7 +12,7 @@ class Vector:
     def position(self):
         return np.array([self.x, self.y, self.z])
     
-    def rotate(self, pitch, yaw, roll):
+    def rotate(self, yaw, pitch, roll):
         # Convert angles from degrees to radians
         pitch = np.radians(pitch)
         yaw = np.radians(yaw)
@@ -39,7 +39,7 @@ class Vector:
 
         # Combine the matrices 
         # Rotation matrices are not commutative, so the order we multiply them in matters
-        rotation_matrix = pitch_matrix @ yaw_matrix
+        rotation_matrix = roll_matrix @ pitch_matrix @ yaw_matrix
         # Apply the matrix to the vector
         rotated =  self.position() @ rotation_matrix
 
@@ -47,7 +47,27 @@ class Vector:
         self.y = rotated[1]
         self.z = rotated[2]
 
+    def normalise(self):
+        # Convert a 3d vector to have a length of 1
+        magnitude = self.length()
+        # Avoid edge case of (0, 0, 0) vectors
+        if magnitude == 0:
+            self.x = 0
+            self.y = 0
+            self.z = 0
+        else:
+            self.x = self.x / magnitude
+            self.y = self.y / magnitude
+            self.z = self.z / magnitude
 
+    def round(self, length):
+        self.x = round(self.x, length)
+        self.y = round(self.y, length)
+        self.z = round(self.z, length)
+
+    def toInt(self):
+        return Vector((int(self.x), int(self.y), int(self.z)))
+    
     def __add__(self, other):
         # If the thing you are adding isn't a vector, return NotImplemented
         if not isinstance(other, Vector):
@@ -79,21 +99,4 @@ class Vector:
         self.x -= other.x
         self.y -= other.y
         self.z -= other.z
-
-    def normalise(self):
-        # Convert a 3d vector to have a length of 1
-        
-        # Avoid edge case of (0, 0, 0) vectors
-        if self.length() == 0:
-            self.x = 0
-            self.y = 0
-            self.z = 0
-        else:
-            self.x = self.x / self.length()
-            self.y = self.y / self.length()
-            self.z = self.z / self.length()
-
-    def round(self, length):
-        self.x = round(self.x, length)
-        self.y = round(self.y, length)
-        self.z = round(self.z, length)
+    

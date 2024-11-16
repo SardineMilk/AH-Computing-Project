@@ -3,10 +3,11 @@ from camera import Camera
 from pygame.locals import *
 
 class Player(Camera):
-    def update(self, keys, mouse_movement, delta):
+    def update(self, keys, mouse_movement, mouse_pressed, delta):
         # Update the position/rotation using the input values
         self.__rotate(mouse_movement, delta)
         self.__move(keys, delta)
+        self.__calculateLookPosAndType(mouse_pressed)
 
         # Update the matrices with the new values
         self._updateCameraMatrix()
@@ -35,8 +36,8 @@ class Player(Camera):
             movement_vector.z -= speed
         
         # Normalise the vector so moving diagonally isn't faster
-        #movement_vector.normalise()
-
+        movement_vector.normalise()
+        
         # Rotate the vector so moving forward always moves you 'forward' from your perspective
         movement_vector.rotate(self.rotation.x, self.rotation.y, self.rotation.z)
 
@@ -51,4 +52,14 @@ class Player(Camera):
         self.rotation = self.rotation + rotation_vector
         # Clamp the pitch to directly up/down
         self.rotation.y = clamp(self.rotation.y, -90, 90)
-        
+    
+    def __calculateLookPosAndType(self, mouse_pressed):
+        self.look_pos = Vector((0, 0, 0))
+        self.held_voxel = 1
+
+        if mouse_pressed[0]:  # Left Click
+            self.look_type = 0
+        elif mouse_pressed[2]:  # Right Click
+            self.look_type = self.held_voxel
+        else:
+            self.look_type = None
