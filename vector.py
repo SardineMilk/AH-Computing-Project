@@ -10,7 +10,7 @@ class Vector:
         return math.sqrt(self.x**2 + self.y**2 + self.z**2)
     
     def position(self):
-        return np.array([self.x, self.y, self.z])
+        return list([self.x, self.y, self.z])
     
     def rotate(self, yaw, pitch, roll):
         # Convert angles from degrees to radians

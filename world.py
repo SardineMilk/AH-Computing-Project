@@ -40,16 +40,18 @@ class World:
 
             # Alter voxel
             self.setVoxel(altered_voxel_pos.position(), altered_voxel_type)
-
+            #print(self.__getChunk((altered_chunk_x, altered_chunk_y, altered_chunk_z)).voxels)
+            #print(self.__getChunk((altered_chunk_x, altered_chunk_y, altered_chunk_z)).getVoxel((0, 0, 0)))
             # Recreate mesh in altered chunks
             # We need to update all adjacent chunks as well to prevent holes in the mesh if you remove a voxel at the edge of a chunk
-            self.__getChunk((altered_chunk_x, altered_chunk_y, altered_chunk_z)).updateMesh()
-            self.__getChunk((altered_chunk_x+1, altered_chunk_y, altered_chunk_z)).updateMesh()  # +x
-            self.__getChunk((altered_chunk_x-1, altered_chunk_y, altered_chunk_z)).updateMesh()  # -x
-            self.__getChunk((altered_chunk_x, altered_chunk_y+1, altered_chunk_z)).updateMesh()  # +y
-            self.__getChunk((altered_chunk_x, altered_chunk_y-1, altered_chunk_z)).updateMesh()  # -y
-            self.__getChunk((altered_chunk_x, altered_chunk_y, altered_chunk_z+1)).updateMesh()  # +z
-            self.__getChunk((altered_chunk_x, altered_chunk_y, altered_chunk_z-1)).updateMesh()  # -z
+            self.getChunk((altered_chunk_x, altered_chunk_y, altered_chunk_z)).updateMesh()
+            self.getChunk((altered_chunk_x+1, altered_chunk_y, altered_chunk_z)).updateMesh()  # +x
+            self.getChunk((altered_chunk_x-1, altered_chunk_y, altered_chunk_z)).updateMesh()  # -x
+            self.getChunk((altered_chunk_x, altered_chunk_y+1, altered_chunk_z)).updateMesh()  # +y
+            self.getChunk((altered_chunk_x, altered_chunk_y-1, altered_chunk_z)).updateMesh()  # -y
+            self.getChunk((altered_chunk_x, altered_chunk_y, altered_chunk_z+1)).updateMesh()  # +z
+            self.getChunk((altered_chunk_x, altered_chunk_y, altered_chunk_z-1)).updateMesh()  # -z
+
         
     def __updateRenderedChunks(self, player_pos):
         #TODO add unloading
@@ -60,14 +62,14 @@ class World:
             z =i // RENDER_DISTANCE ** 2
 
             # Shift so chunks generate centred on the player
-            x = player_pos.x//CHUNK_SIZE + x
-            y = player_pos.y//CHUNK_SIZE + y
-            z = player_pos.z//CHUNK_SIZE + z
+            x = int(player_pos.x//CHUNK_SIZE + x)
+            y = int(player_pos.y//CHUNK_SIZE + y)
+            z = int(player_pos.z//CHUNK_SIZE + z)
 
             loaded_chunk_position = [x, y, z]
             if self.__getChunkIndex(loaded_chunk_position) == None:
                 self.__loadChunk(loaded_chunk_position)
-                print(f"Loaded {loaded_chunk_position}")
+                #print(f"Loaded {loaded_chunk_position}")
 
     def getVoxel(self, position):
         # Using a world position, return the local position
@@ -79,7 +81,7 @@ class World:
         # Set the type of a voxel at a specific world position
         # Get the chunk object we need to change
         chunk_position, local_position = self.__worldToLocal(position)
-        chunk = self.__getChunk(chunk_position)
+        chunk = self.getChunk(chunk_position)
         # Change the type of the voxel
         chunk.setVoxel(local_position, type)
 
@@ -91,7 +93,7 @@ class World:
     def __loadChunk(self, position):
         # Check if in file
         # Else:
-        self.chunks.append(VoxelChunk(position, np.zeros([16,16,16])))
+        self.chunks.append(VoxelChunk(list(position), np.zeros([16,16,16], dtype=int)))
 
     def __worldToLocal(self, position) -> tuple[list[int, int, int], list[int, int, int]]:
         # Convert a world position to a local position
@@ -106,9 +108,9 @@ class World:
         # From a chunk position, get the 
         # Index of the chunk in the array of loaded chunks
         for index, chunk in enumerate(self.chunks):
-            if chunk.position == position:  
+            if chunk.position == list(position):  
                 return index
         return None
 
-    def __getChunk(self, position) -> VoxelChunk:
+    def getChunk(self, position) -> VoxelChunk:
         return self.chunks[self.__getChunkIndex(position)]
