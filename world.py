@@ -51,8 +51,32 @@ class World:
             self.getChunk((altered_chunk_x, altered_chunk_y-1, altered_chunk_z)).updateMesh()  # -y
             self.getChunk((altered_chunk_x, altered_chunk_y, altered_chunk_z+1)).updateMesh()  # +z
             self.getChunk((altered_chunk_x, altered_chunk_y, altered_chunk_z-1)).updateMesh()  # -z
-
         
+        self.mesh = []
+        for chunk in self.chunks:
+            # += not append so it doesnt add an additional dimension to the mesh
+            if chunk.mesh != None:
+                self.mesh += chunk.mesh
+
+    def getVoxel(self, position):
+        # Get the chunk position and position of the voxel within the chunk
+        chunk_position, local_position = self.__worldToLocal(position)
+        # Get the chunk at chunk_position
+        chunk_data = self.getChunk(chunk_position)
+        # Return the voxel data of the correct voxel within the chunk
+        return chunk_data.getVoxel(local_position)
+    
+    def setVoxel(self, position, type):
+        # Set the type of a voxel at a specific world position
+        # Get the chunk object we need to change
+        chunk_position, local_position = self.__worldToLocal(position)
+        chunk = self.getChunk(chunk_position)
+        # Change the type of the voxel
+        chunk.setVoxel(local_position, type)
+
+    def getChunk(self, position) -> VoxelChunk:
+        return self.chunks[self.__getChunkIndex(position)]
+
     def __updateRenderedChunks(self, player_pos):
         #TODO add unloading
         for i in range(RENDER_DISTANCE ** 3):
@@ -71,29 +95,18 @@ class World:
                 self.__loadChunk(loaded_chunk_position)
                 #print(f"Loaded {loaded_chunk_position}")
 
-    def getVoxel(self, position):
-        # Using a world position, return the local position
-        chunk_position, local_position = self.__worldToLocal(position)
-        chunk_data = self.__getChunkData(chunk_position)
-        return chunk_data.getVoxel(local_position)
-    
-    def setVoxel(self, position, type):
-        # Set the type of a voxel at a specific world position
-        # Get the chunk object we need to change
-        chunk_position, local_position = self.__worldToLocal(position)
-        chunk = self.getChunk(chunk_position)
-        # Change the type of the voxel
-        chunk.setVoxel(local_position, type)
-
-    def __getChunkData(self, position):
-        # 3d to flatpack
-        chunk_index = self.__getChunkIndex(position)
-        return self.chunks[chunk_index]
-
     def __loadChunk(self, position):
         # Check if in file
         # Else:
         self.chunks.append(VoxelChunk(list(position), np.zeros([16,16,16], dtype=int)))
+
+    def __getChunkIndex(self, position) -> int|None:
+        # From a chunk position, get the 
+        # Index of the chunk in the array of loaded chunks
+        for index, chunk in enumerate(self.chunks):
+            if chunk.position == list(position):  
+                return index
+        return None
 
     def __worldToLocal(self, position) -> tuple[list[int, int, int], list[int, int, int]]:
         # Convert a world position to a local position
@@ -104,13 +117,3 @@ class World:
 
         return chunk_index, local_index
     
-    def __getChunkIndex(self, position) -> int|None:
-        # From a chunk position, get the 
-        # Index of the chunk in the array of loaded chunks
-        for index, chunk in enumerate(self.chunks):
-            if chunk.position == list(position):  
-                return index
-        return None
-
-    def getChunk(self, position) -> VoxelChunk:
-        return self.chunks[self.__getChunkIndex(position)]

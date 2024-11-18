@@ -46,9 +46,7 @@ class VoxelChunk:
                 check_pos = Vector(voxel_pos) + face_normal
                 if self.voxels[check_pos.x, check_pos.y, check_pos.z] == 0:
                     voxel_type = self.voxels[voxel_pos[0], voxel_pos[1], voxel_pos[2]]
-                    #mesh.append((voxel_pos, face_index, voxel_type))
                     face = [VERTICES[i].position()[0:2] for i in FACES[face_index]]
-                    self.mesh.append((tuple(face), 1))
+                    self.mesh.append((tuple(face), voxel_type))
         # voxel_color = voxel_types[voxel_type]
         # Greedy Meshing
-

@@ -61,11 +61,11 @@ class VoxelEngine:
         # Display voxel faces
         
         
-        faces = self.world.getChunk((0, 0, 0)).mesh
+        faces = self.world.mesh
         
         #[pg.gfxdraw.filled_polygon(self.screen, shape, color) for shape, color in faces]  # Slower
         if faces != None:
-            [pg.draw.polygon(self.screen, color, shape) for (shape, color) in faces]
+            [pg.draw.polygon(self.screen, (0, 127, 127), shape) for (shape, color) in faces]
 
         # Display HUD
         #print(self.player.position.position().round(1), "   ", self.player.rotation.position().round(1), "  ", round(self.fps, 2), "   ", len(self.world.chunks))  

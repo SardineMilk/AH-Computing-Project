@@ -7,7 +7,7 @@ class Player(Camera):
         # Update the position/rotation using the input values
         self.__rotate(mouse_movement, delta)
         self.__move(keys, delta)
-        self.__calculateLookPosAndType(mouse_pressed)
+        self.__calculateLookType(mouse_pressed)
 
         # Update the matrices with the new values
         self._updateCameraMatrix()
@@ -53,7 +53,7 @@ class Player(Camera):
         # Clamp the pitch to directly up/down
         self.rotation.y = clamp(self.rotation.y, -90, 90)
     
-    def __calculateLookPosAndType(self, mouse_pressed):
+    def __calculateLookType(self, mouse_pressed):
         self.look_pos = Vector((0, 0, 0))
         self.held_voxel = 1
 
